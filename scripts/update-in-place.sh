@@ -13,7 +13,7 @@ function main() {
 
   if [ -d $tmp_dir ]; then
     log "purging directory $tmp_dir"
-    rm -rf $tmp_dir
+    rm -rf $tmp_dir/*
   else
     log "creating directory $tmp_dir"
     mkdir $tmp_dir
