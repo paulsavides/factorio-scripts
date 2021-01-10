@@ -2,7 +2,7 @@
 
 tmp_dir_base=/tmp/factorio-tmp
 factorio_root=/opt/factorio
-install_url=https://www.factorio.com/get-download/latest/headless/linux64
+install_url=https://www.factorio.com/get-download/latest/headless/linux6
 
 function log() {
   echo "INF: $*"
@@ -28,7 +28,7 @@ function download_latest_version() {
   latest_fq=$download_location/$filename
 
   log "downloading latest factorio version to $latest_fq"
-  wget $download_url -O $download_location/$filename
+  wget $download_url -O $download_location/$filename || return $?
 }
 
 function backup_required_files() {
