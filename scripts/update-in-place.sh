@@ -105,7 +105,7 @@ function main() {
   filename=factorio_latest
 
   log "downloading latest version..."
-  download_extract_latest_version $download_location $install_url $filename || return $?
+  download_latest_version $download_location $install_url $filename || return $?
 
   # log "purging current installation..."
   # rm -rf $factorio_root/* || return $?
