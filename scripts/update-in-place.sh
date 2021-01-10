@@ -12,11 +12,11 @@ function main() {
   log "using factorio_root=$factorio_root"
 
   if [ -d $tmp_dir ]; then
-    log "creating directory $tmp_dir"
-    rm -rf $tmp_dir
-  else
     log "purging directory $tmp_dir"
     mkdir $tmp_dir
+  else
+    log "creating directory $tmp_dir"
+    rm -rf $tmp_dir
   fi
 
   cp_directories=(
