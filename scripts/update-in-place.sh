@@ -1,6 +1,4 @@
 #!/bin/bash
-script_source=$(dirname ${BASH_SOURCE[0]})
-. $script_source/logging.sh
 
 tmp_dir=/tmp/factorio-tmp
 factorio_root=/opt/factorio
@@ -8,7 +6,7 @@ factorio_root=/opt/factorio
 function main() {
   if [ -d $tmp_dir ]; then
     rm -rf $tmp_dir
-  elif
+  else
     mkdir $tmp_dir
   fi
 
