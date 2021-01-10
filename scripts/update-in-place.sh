@@ -2,6 +2,7 @@
 
 tmp_dir_base=/tmp/factorio-tmp
 factorio_root=/opt/factorio
+install_url=https://www.factorio.com/get-download/latest/headless/linux64
 
 function log() {
   echo "INF: $*"
@@ -9,6 +10,25 @@ function log() {
 
 function log_err() {
   echo "ERR: $*" 1>&2
+}
+
+function download_latest_version() {
+  download_location=$1
+  download_url=$2
+  filename=$3
+
+  if [ ! -d $download_location ]; then
+    log "creating directory $download_location"
+    mkdir $download_location
+  else
+    log "purging download directory $download_location"
+    rm -rf $download_location/*
+  fi
+
+  latest_fq=$download_location/$filename
+
+  log "downloading latest factorio version to $latest_fq"
+  wget $download_url -O $download_location/$filename
 }
 
 function backup_required_files() {
@@ -79,16 +99,21 @@ function main() {
     mkdir $tmp_dir_base
   fi
 
-  if [ ! -d $download_location ]; then
-    log "creating directory $download_location"
-    mkdir $download_location
-  else
-    log "purging download directory $download_location"
-    rm -rf $download_location/*
-  fi
-
   log "backing up files that need to be persisted across installs..."
   backup_required_files $backup_location || return $?
+
+  filename=factorio_latest
+
+  log "downloading latest version..."
+  download_extract_latest_version $download_location $install_url $filename || return $?
+
+  # log "purging current installation..."
+  # rm -rf $factorio_root/* || return $?
+
+  # log "restoring backed up files to new install..."
+  # cp -rf $backup_location/* $factorio_root || return $?
+
+  log "installation finished, purge $tmd_dir_base manually once you are satisfied it worked"
 }
 
 main
