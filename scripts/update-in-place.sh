@@ -2,7 +2,7 @@
 
 tmp_dir_base=/tmp/factorio-tmp
 factorio_root=/opt/factorio
-install_url=https://www.factorio.com/get-download/latest/headless/linux6
+install_url=https://www.factorio.com/get-download/latest/headless/linux64
 
 function log() {
   echo "INF: $*"
@@ -107,11 +107,14 @@ function main() {
   log "downloading latest version..."
   download_latest_version $download_location $install_url $filename || return $?
 
-  # log "purging current installation..."
-  # rm -rf $factorio_root/* || return $?
+  log "purging current installation..."
+  rm -rf $factorio_root/* || return $?
 
-  # log "restoring backed up files to new install..."
-  # cp -rf $backup_location/* $factorio_root || return $?
+  log "extracting downloaded file over expected directory"
+  tar --strip-components 1 -xf "$download_location/$filename" -C $factorio_root || return $?
+
+  log "restoring backed up files to new install..."
+  cp -rf $backup_location/* $factorio_root || return $?
 
   log "installation finished, purge $tmp_dir_base manually once you are satisfied it worked"
 }
