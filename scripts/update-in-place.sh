@@ -11,17 +11,12 @@ function log_err() {
   echo "ERR: $*" 1>&2
 }
 
-function main() {
-  rand_ext=$RANDOM
-
-  tmp_dir=$tmp_dir_base/$rand_ext
-
-  log "using tmp_dir=$tmp_dir"
-  log "using factorio_root=$factorio_root"
+function backup_required_files() {
+  tmp_dir=$1
 
   if [ -d $tmp_dir ]; then
     log_err "did not expect $tmp_dir to already exist... exiting"
-    return false
+    return 1
   else
     log "creating directory $tmp_dir"
     mkdir $tmp_dir
@@ -67,9 +62,33 @@ function main() {
       cp $cp_file_fq $tmp_dir/$cp_file
     fi
   done
+}
 
+function main() {
+  rand_ext=$RANDOM
+  backup_location=$tmp_dir_base/$rand_ext
+  download_location=$tmp_dir_base/downloads
 
-  mkdir
+  log "using tmp_dir_base=$tmp_dir_base"
+  log "using backup_location=$backup_location"
+  log "using download_location=$download_location"
+  log "using factorio_root=$factorio_root"
+
+  if [ ! -d $tmp_dir_base ]; then
+    log "creating directory $tmp_dir_base"
+    mkdir $tmp_dir_base
+  fi
+
+  if [ ! -d $download_location ]; then
+    log "creating directory $download_location"
+    mkdir $download_location
+  else
+    log "purging download directory $download_location"
+    rm -rf $download_location/*
+  fi
+
+  log "backing up files that need to be persisted across installs..."
+  backup_required_files $backup_location || return $?
 }
 
 main
