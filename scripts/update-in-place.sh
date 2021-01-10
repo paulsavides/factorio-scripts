@@ -113,8 +113,14 @@ function main() {
   # log "restoring backed up files to new install..."
   # cp -rf $backup_location/* $factorio_root || return $?
 
-  log "installation finished, purge $tmd_dir_base manually once you are satisfied it worked"
+  log "installation finished, purge $tmp_dir_base manually once you are satisfied it worked"
 }
 
 main
-exit $?
+
+if [ $? -ne 0 ]; then
+  log_err "an error ocurred in the installation, any data should be preserved in $tmp_dir_base"
+  exit 1
+else
+  exit 0
+fi
