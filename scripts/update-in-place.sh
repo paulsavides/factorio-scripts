@@ -1,19 +1,27 @@
 #!/bin/bash
 
-tmp_dir=/tmp/factorio-tmp
+tmp_dir_base=/tmp/factorio-tmp
 factorio_root=/opt/factorio
 
 function log() {
   echo "INF: $*"
 }
 
+function log_err() {
+  echo "ERR: $*" 1>&2
+}
+
 function main() {
+  rand_ext=$RANDOM
+
+  tmp_dir=$tmp_dir_base/$rand_ext
+
   log "using tmp_dir=$tmp_dir"
   log "using factorio_root=$factorio_root"
 
   if [ -d $tmp_dir ]; then
-    log "purging directory $tmp_dir"
-    rm -rf $tmp_dir/*
+    log_err "did not expect $tmp_dir to already exist... exiting"
+    return false
   else
     log "creating directory $tmp_dir"
     mkdir $tmp_dir
@@ -26,6 +34,8 @@ function main() {
 
   cp_files=(
     "achievements.dat"
+    "config-path.cfg"
+    "player-data.json"
     "config/config.ini"
     "data/map-gen-settings.json"
     "data/map-settings.json"
@@ -57,6 +67,9 @@ function main() {
       cp $cp_file_fq $tmp_dir/$cp_file
     fi
   done
+
+
+  mkdir
 }
 
 main
