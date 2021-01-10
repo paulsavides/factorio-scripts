@@ -47,14 +47,13 @@ function main() {
   for cp_file in ${cp_files[@]}; do
     cp_file_fq=$factorio_root/$cp_file
     if [ -f $cp_file_fq ]; then
-      log "copying file $cp_file_fq"
-
       cp_file_dir=$(dirname $cp_file)
-      if [ "." != "$cp_file_dir" ]; then
-        log "creating file prefix $tmp_dir/$cp_file_dir"
+      if [ "." != "$cp_file_dir" ] && [ ! -d "$tmp_dir/$cp_file_dir" ]; then
+        log "creating directory prefix $tmp_dir/$cp_file_dir"
         mkdir $tmp_dir/$cp_file_dir
       fi
 
+      log "copying file $cp_file_fq"
       cp $cp_file_fq $tmp_dir/$cp_file
     fi
   done
