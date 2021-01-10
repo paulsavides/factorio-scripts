@@ -50,7 +50,7 @@ function main() {
       log "copying file $cp_file_fq"
 
       cp_file_dir=$(dirname $cp_file)
-      if [ "." -ne "$cp_file_dir" ]; then
+      if [ "." != "$cp_file_dir" ]; then
         log "creating file prefix $tmp_dir/$cp_file_dir"
         mkdir $tmp_dir/$cp_file_dir
       fi
