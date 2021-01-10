@@ -10,10 +10,6 @@ function main() {
     mkdir $tmp_dir
   fi
 
-  mkdir $tmp_dir/saves
-  mkdir $tmp_dir/config
-  mkdir $tmp_dir/data
-
   cp_directories=(
     "saves"
     "mods"
@@ -41,7 +37,7 @@ function main() {
     cp_file_fq=$factorio_root/$cp_file
     if [ -f $cp_file_fq ]; then
       cp_file_dir=$(dirname $cp_file)
-      if [ "." -ne "$cp_file_dir"]; then
+      if [ "." -ne "$cp_file_dir" ]; then
         mkdir $tmp_dir/$cp_file_dir
       fi
 
