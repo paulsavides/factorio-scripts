@@ -86,7 +86,7 @@ function main() {
 
   service_running=$(systemctl is-active --quiet factorio && echo "true")
 
-  if [ "true" = "$service_running" ];
+  if [ "true" = "$service_running" ]; then
     log "Stopping currently running factorio service..."
     systemctl stop factorio
     log "Factorio stopped"
