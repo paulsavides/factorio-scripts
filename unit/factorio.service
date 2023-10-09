@@ -1,0 +1,15 @@
+[Unit]
+Description=Factorio Server
+StartLimitInterval=600
+StartLimitBurst=5
+
+[Service]
+ExecStart=/opt/factorio/bin/x64/factorio --start-server default
+WorkingDirectory=/opt/factorio
+Restart=on-failure
+Type=simple
+User=factorio
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

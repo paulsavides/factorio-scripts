@@ -1,16 +1,11 @@
 #!/bin/bash
 
+source_root=$(realpath "$(dirname "${BASH_SOURCE[0]}")")
+source "$source_root/common/shared"
+
 tmp_dir_base=/tmp/factorio-tmp
 factorio_root=/opt/factorio
 install_url=https://www.factorio.com/get-download/latest/headless/linux64
-
-function log() {
-  echo "INF: $*"
-}
-
-function log_err() {
-  echo "ERR: $*" 1>&2
-}
 
 function download_latest_version() {
   download_location=$1
@@ -89,6 +84,15 @@ function main() {
   backup_location=$tmp_dir_base/$rand_ext
   download_location=$tmp_dir_base/downloads
 
+  service_running=$(systemctl is-active --quiet factorio && echo "true")
+
+  if [ "true" = "$service_running" ];
+    log "Stopping currently running factorio service..."
+    systemctl stop factorio
+    log "Factorio stopped"
+    systemctl status factorio
+  fi
+
   log "using tmp_dir_base=$tmp_dir_base"
   log "using backup_location=$backup_location"
   log "using download_location=$download_location"
@@ -123,6 +127,15 @@ function main() {
   else
     log "restoring backed up files to new install..."
     cp -rf $backup_location/* $factorio_root || return $?
+  fi
+
+  log "reassigning ownership of all files to factorio user..."
+  chown -R factorio:factorio $factorio_root/* || return $?
+
+  if [ "true" = "$service_running" ]; then
+    log "restarting factorio service..."
+    systemctl start factorio
+    systemctl status factorio
   fi
 
   log "installation finished, purge $tmp_dir_base manually once you are satisfied it worked"

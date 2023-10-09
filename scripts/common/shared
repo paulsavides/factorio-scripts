@@ -1,0 +1,7 @@
+function log() {
+  echo "INF: $*"
+}
+
+function log_err() {
+  echo "ERR: $*" 1>&2
+}
