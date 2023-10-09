@@ -99,6 +99,11 @@ function main() {
     mkdir $tmp_dir_base
   fi
 
+  if [ ! -d $factorio_root ]; then
+    log "creating directory $factorio_root"
+    mkdir $factorio_root
+  fi
+
   log "backing up files that need to be persisted across installs..."
   backup_required_files $backup_location || return $?
 
@@ -113,8 +118,12 @@ function main() {
   log "extracting downloaded file over expected directory"
   tar --strip-components 1 -xf "$download_location/$filename" -C $factorio_root || return $?
 
-  log "restoring backed up files to new install..."
-  cp -rf $backup_location/* $factorio_root || return $?
+  if [ -z "$(ls -A $backup_location)" ]; then
+    log "no files backed up, skipping restore"
+  else
+    log "restoring backed up files to new install..."
+    cp -rf $backup_location/* $factorio_root || return $?
+  fi
 
   log "installation finished, purge $tmp_dir_base manually once you are satisfied it worked"
 }
