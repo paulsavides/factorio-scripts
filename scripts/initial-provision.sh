@@ -19,6 +19,6 @@ log "creating initial save"
 su factorio -c "/opt/factorio/bin/x64/factorio --create /opt/factorio/saves/default.zip"
 
 systemctl enable $source_root/../unit/factorio.service
-systemctl status $source_root/../unit/factorio.service
+systemctl status factorio.service
 
 
