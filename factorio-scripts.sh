@@ -3,7 +3,10 @@ source_root=$(dirname $(readlink -f "${BASH_SOURCE[0]}"))
 
 function help() {
   echo "usage: factorio-scripts \$arg"
+  echo -e "\t help <print this message and exit>"
   echo -e "\t provision <initial provision of factorio install>"
+  echo -e "\t restart <restart factorio service>"
+  echo -e "\t update <update factorio install in place>"
 }
 
 if [ "$#" -ne 1 ]; then
